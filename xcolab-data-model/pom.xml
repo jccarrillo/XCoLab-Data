@@ -1,0 +1,135 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.xcolab.data</groupId>
+        <artifactId>xcolab-data-parent</artifactId>
+        <relativePath>../xcolab-data-parent</relativePath>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>xcolab-data-model</artifactId>
+    <packaging>jar</packaging>
+
+    <name>xcolab-data-model</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <db.driver>com.mysql.jdbc.Driver</db.driver>
+        <db.url>jdbc:mysql://localhost:3306/xcolab</db.url>
+        <db.username>root</db.username>
+        <db.password>rekcod</db.password>
+        <db.schema>xcolab</db.schema>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <!-- The plugin should hook into the generate goal -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.39</version>
+                    </dependency>
+                </dependencies>
+
+                <!-- Specify the plugin configuration. The configuration 
+                    format is the same as for the standalone code generator -->
+                <configuration>
+
+                    <!-- JDBC connection parameters -->
+                    <jdbc>
+                        <driver>${db.driver}</driver>
+                        <url>${db.url}</url>
+                        <user>${db.username}</user>
+                        <password>${db.password}</password>
+                    </jdbc>
+
+                    <!-- Generator parameters -->
+                    <generator>
+                        <name>org.jooq.util.JavaGenerator</name>
+                        <database>
+                            <name>org.jooq.util.mysql.MySQLDatabase</name>
+                            <includes>activities_ActivityEntry|
+                                xcolab_ActivitySubscription|
+                                xcolab_BalloonUserTracking|
+                                xcolab_BalloonLink|
+                                xcolab_BalloonText|
+                                xcolab_ConfigurationAttribute|
+                                xcolab_Contest|
+                                xcolab_ContentArticle|
+                                xcolab_ContentArticleVersion|xcolab_ContentFolder|
+                                xcolab_ContestEmailTemplate|
+                                xcolab_ContestPhase|
+                                xcolab_ContestPhaseRibbonType|
+                                xcolab_ContestTeamMember|
+                                xcolab_MemberCategory|
+                                xcolab_Message|
+                                xcolab_MessageRecipientStatus|
+                                xcolab_MessagingUserPreferences|
+                                xcolab_Points|
+                                xcolab_Proposal|
+                                xcolab_Proposal2Phase|
+                                xcolab_ProposalAttribute|
+                                xcolab_ProposalAttributeType|
+                                xcolab_ProposalContestPhaseAttribute|
+                                xcolab_ProposalContestPhaseAttributeType|
+                                xcolab_ProposalMoveHistory|
+                                xcolab_RolesCategory|
+                                SocialActivity|
+                                comment_.* |
+                                files_FileEntry|
+                                filtering_FilteredEntry|
+                                flagging_.*|
+                                members_ColabSSO|
+                                members_Member|
+                                User_|
+                                Users_Roles|
+                                Role_|
+                                Contact_|
+                                members_RoleGroupRoles|
+                                members_RoleGroup|
+                                sharedcolab_SharedMember
+                            </includes>
+                            <inputSchema>${db.schema}</inputSchema>
+                            <forcedTypes>
+                                <forcedType>
+                                    <name>BOOLEAN</name>
+                                    <types>(?i:TINYINT(\s*\(\d+\))?(\s*UNSIGNED)?)</types>
+                                </forcedType>
+                            </forcedTypes>
+                        </database>
+                        <generate>
+                            <pojos>true</pojos>
+                            <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>
+                        </generate>
+                        <target>
+                            <packageName>org.xcolab.data.model</packageName>
+                            <directory>target/generated-sources</directory>
+                        </target>
+                        <strategy>
+                            <name>org.xcolab.data.util.XColabGeneratorStrategy</name>
+                        </strategy>
+                    </generator>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.xcolab.data</groupId>
+            <artifactId>xcolab-data-util</artifactId>
+        </dependency>
+    </dependencies>
+</project>
